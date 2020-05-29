@@ -428,7 +428,7 @@ public class UserController {
 */
 	@ModelAttribute
 	public void headerMessage(Model model){
-		model.addAttribute("headerMessage", "Welcome to Samuel's JSP Web");
+		model.addAttribute("headerMessage", "Welcome to Samuel's JSP Web2");
 		
 		
 	}
