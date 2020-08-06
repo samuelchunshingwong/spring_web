@@ -9,11 +9,13 @@ import java.util.List;
 
 
 import com.infotech.model.GoogleMap;
+import com.infotech.model.User;
 
 @Service
 public interface MapService {
 	
 	public abstract List<GoogleMap> getMapList();
+	public abstract boolean registerMap(GoogleMap googlemap);
 	
 }
 	

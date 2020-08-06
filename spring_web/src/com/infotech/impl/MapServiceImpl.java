@@ -9,6 +9,7 @@ import java.util.List;
 
 
 import com.infotech.model.GoogleMap;
+import com.infotech.model.User;
 import com.infotech.service.MapService;
 
 @Service
@@ -21,6 +22,16 @@ public class MapServiceImpl implements MapService {
 		return mapDAO.getMapList();
 	}
 
+	public boolean registerMap(GoogleMap googlemap) {
+		boolean isRegister=false;
+		boolean saveMap = mapDAO.saveMap(googlemap);
+		if(saveMap)
+			isRegister=true;
+		return isRegister;
+	}
+
+	
+	
 	
 
 }

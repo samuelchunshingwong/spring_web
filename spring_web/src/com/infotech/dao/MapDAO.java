@@ -14,7 +14,7 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 
 @Repository
 public interface MapDAO {
-	//public abstract boolean saveUser(User user);
+	public abstract boolean saveMap(GoogleMap googlemap);
 	//public User getUserDetailsByEmailAndPassword(String email,String password);
 	public abstract List<GoogleMap> getMapList();
 	//public abstract boolean checkUserByEmail(String email);

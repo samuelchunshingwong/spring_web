@@ -70,6 +70,7 @@
 
 	</table>
 	<h3 align="left"><a href="/spring_web/map">Show Map</a></h3>
+	<h3 align="right"><a href="/spring_web/insert_map">Add Map Location</a></h3>
 	</div>
 
         

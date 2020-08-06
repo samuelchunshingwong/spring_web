@@ -37,8 +37,8 @@ Logger logger=Logger.getLogger("global");
 	 list = new ArrayList<GoogleMap>();
 	 
 	 //List<User> findByCriteria = (List<User>) hibernateTemplate.find( "FROM Users");
-	 //list.add(new GoogleMap(1,"¸ª«C","¸ª«C", 22.3548, 114.126,"https://zh.wikipedia.org/wiki/%E8%91%B5%E9%9D%92%E5%8D%80"));
-	 //list.add(new GoogleMap(2,"¸ª«C","¸ª«C", 22.3715, 114.114,"https://zh.wikipedia.org/wiki/%E8%91%B5%E9%9D%92%E5%8D%80"));
+	 //list.add(new GoogleMap(1,"ï¿½ï¿½ï¿½C","ï¿½ï¿½ï¿½C", 22.3548, 114.126,"https://zh.wikipedia.org/wiki/%E8%91%B5%E9%9D%92%E5%8D%80"));
+	 //list.add(new GoogleMap(2,"ï¿½ï¿½ï¿½C","ï¿½ï¿½ï¿½C", 22.3715, 114.114,"https://zh.wikipedia.org/wiki/%E8%91%B5%E9%9D%92%E5%8D%80"));
     }
     
      @SuppressWarnings("unchecked")
@@ -57,7 +57,12 @@ Logger logger=Logger.getLogger("global");
     	 return list;
  		//return null;
  	}
-    
+     public boolean saveMap(GoogleMap googlemap) {
+ 		int id = (Integer)hibernateTemplate.save(googlemap);
+ 		if(id>0)
+ 			return true;
+ 		return false;
+ 	}
 
 	
 }

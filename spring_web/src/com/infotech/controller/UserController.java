@@ -203,6 +203,30 @@ public class UserController {
 		}
 		
 	}
+	@RequestMapping(value ="/insert_map" ,method=RequestMethod.GET)
+	public String insert_map(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		model.addAttribute("map", new GoogleMap());
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			return "add_location";
+		}
+		
+	}
+	/*
+	@RequestMapping(value ="/user_reg" ,method=RequestMethod.GET)
+	public String user_register_page(Model model) {//Model model){
+		//model.addAttribute("student", new Student());
+		model.addAttribute("user", new User());//"user" should match with form modelAttribute
+		return "user_reg";
+	}
+	*/
 	@RequestMapping(value ="/login_error" ,method=RequestMethod.GET)
 	public String login_error(){
 		return "notFound";
@@ -215,6 +239,12 @@ public class UserController {
 	public String reg_success(){
 		return "reg_success";
 	}
+	/*
+	@RequestMapping(value ="/add_location_success" ,method=RequestMethod.GET)
+	public String loc_success(){
+		return "loc_success";
+	}
+	*/
 	@RequestMapping(value ="/user_reg" ,method=RequestMethod.GET)
 	public String user_register_page(Model model) {//Model model){
 		//model.addAttribute("student", new Student());
@@ -349,6 +379,27 @@ public class UserController {
 		//return new ModelAndView("view name", "model name","model object");
 	}
 	*/
+	
+	
+	@RequestMapping(value="/add_loc_success_jsp_form",method=RequestMethod.POST)
+	public String add_loc_success_jsp_form(Model model, @Valid @ModelAttribute("map") GoogleMap googlemap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
+		//User user = new User(username,age,email);
+		if(bindingResult.hasErrors()){
+			//return "user_reg";
+			return "add_location";
+		}
+		
+		
+		mapService.registerMap(googlemap);
+		
+		
+		
+		//model.addAttribute("emailDuplicate","registered success");
+		return "redirect:/map";
+		
+		
+	}
+	
 	@RequestMapping(value="/user_reg_success_jsp_form",method=RequestMethod.POST)
 	public String user_reg_success_jsp_form(Model model, @Valid @ModelAttribute("user") User user, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
 		//User user = new User(username,age,email);

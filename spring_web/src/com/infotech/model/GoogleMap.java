@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 
 
@@ -19,6 +21,7 @@ public class GoogleMap {
 	
 	//@NotEmpty
 	//@Size(min=6,max=20)//{2} means min //base on alphabetical order, max mean {1}
+	@NotEmpty
 	@Column(name = "loc_name")
 	private String loc_name;
 	
@@ -26,22 +29,24 @@ public class GoogleMap {
 	//@Min(value = 12)//, message="Age cannot be less than 12")
 	//@Max(value = 120)//,  message="Age cannot be larger than 120")
 	//@NotNull
+	@NotEmpty
 	@Column(name = "loc_info")
 	private String loc_info;
 	
-
+	@NotNull
 	@Column(name = "lat")
-	private double lat;
+	private float lat;
 	
+	@NotNull
 	@Column(name = "lng")
-	private double lng;
+	private float lng;
 	
 	
 	@Column(name = "wiki_link")
 	private String wiki_link;
 	
 	
-	public GoogleMap(Integer mid, String loc_name, String loc_info, double lat, double lng, String wiki_link) {
+	public GoogleMap(Integer mid, String loc_name, String loc_info, float lat, float lng, String wiki_link) {
 		super();
 		this.mid = mid;
 		this.loc_name = loc_name;
@@ -73,13 +78,13 @@ public class GoogleMap {
 	public void setLoc_info(String loc_info) {
 		this.loc_info = loc_info;
 	}
-	public double getLat() {
+	public float getLat() {
 		return lat;
 	}
 	public void setLat(Float lat) {
 		this.lat = lat;
 	}
-	public double getLng() {
+	public float getLng() {
 		return lng;
 	}
 	public void setLng(Float lng) {
