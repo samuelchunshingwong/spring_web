@@ -45,6 +45,9 @@ public class User {
 	@Column(name = "password")
 	private String password;
 	
+	@Column(name = "admin")
+	private String admin;
+	
 	
 	public User(Integer uid, String username, Integer age, String email, String password) {
 		super();
@@ -95,6 +98,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 
 }

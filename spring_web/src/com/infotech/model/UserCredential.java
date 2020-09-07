@@ -10,6 +10,8 @@ public class UserCredential {
 	
 	@NotEmpty
 	private String password;
+	
+	private String admin;
 
 	public String getEmail() {
 		return email;
@@ -26,4 +28,5 @@ public class UserCredential {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 }

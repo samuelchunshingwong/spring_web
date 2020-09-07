@@ -47,15 +47,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 //import com.infotech.model.Student;
 import com.infotech.model.UserCredential;
 import com.infotech.dao.MapDAO;
+import com.infotech.model.CovidMap;
 //import com.infotech.model.StudentCredential;
 import com.infotech.model.GoogleMap;
 import com.infotech.model.User;
-
+import com.infotech.service.CovidMapService;
 import com.infotech.service.MapService;
 import com.infotech.service.UserService;
 //import com.infotech.service.UserServiceInterface;
 
-
+import java.sql.Date;
 //import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +69,9 @@ public class UserController {
 	
 	@Autowired
 	private MapService mapService;
+	
+	@Autowired
+	private CovidMapService covidmapService;
 	
 	Logger logger=Logger.getLogger("global");
 	/*
@@ -94,6 +98,26 @@ public class UserController {
 		else {
 		ModelAndView modelAndView = new ModelAndView("map");
 		List<GoogleMap> mapList = mapService.getMapList();
+		logger.info("Check map: " + mapList);
+		//logger.info("User List: " + userList);
+		modelAndView.addObject("mapList", mapList);
+		
+		return modelAndView;
+		}
+	}
+	
+	@RequestMapping(value ="/covid_map" ,method=RequestMethod.GET)
+	public ModelAndView covid_map(HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+	    
+		if (user_mail == "" || user_mail == null) {
+			ModelAndView modelAndView = new ModelAndView("redirect:/");
+			return modelAndView;
+		}
+		else {
+		ModelAndView modelAndView = new ModelAndView("covid_map");
+		List<CovidMap> mapList = covidmapService.getMapList();
 		logger.info("Check map: " + mapList);
 		//logger.info("User List: " + userList);
 		modelAndView.addObject("mapList", mapList);
@@ -207,6 +231,8 @@ public class UserController {
 	public String insert_map(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session){
 		HttpSession checkSession = request.getSession(false);
 		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		logger.info("insert map Session admin: " + user_admin);
 		model.addAttribute("map", new GoogleMap());
 		
 		if (user_mail == "" || user_mail == null) {
@@ -215,7 +241,35 @@ public class UserController {
 		}
 		else {
 			
+			if (user_admin.equals("Y")) {
 			return "add_location";
+			}
+			else {
+				return "redirect:/welcome";
+			}
+		}
+		
+	}
+	@RequestMapping(value ="/insert_covid_map" ,method=RequestMethod.GET)
+	public String insert_covid_map(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		logger.info("insert map Session admin: " + user_admin);
+		model.addAttribute("map", new CovidMap());
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			if (user_admin.equals("Y")) {
+			return "add_covid_location";
+			}
+			else {
+				return "redirect:/welcome";
+			}
 		}
 		
 	}
@@ -289,13 +343,16 @@ public class UserController {
 		    newSession.setAttribute("user_mail", studentCredential.getEmail());
 		    newSession.setAttribute("user_name", student.getUsername());
 		    newSession.setAttribute("user_age", student.getAge());
+		    newSession.setAttribute("user_admin", student.getAdmin());
 		    newSession.setAttribute("user_password", studentCredential.getPassword());
 		    
 		    String user_mail = (String) newSession.getAttribute("user_mail");
+		    String user_admin = (String) newSession.getAttribute("user_admin");
 		    
 		    logger.info("abcdef");
 		    logger.info("Session ID: " + newSession.getId());
 		    logger.info("Session email: " + user_mail);
+		    logger.info("Session admin: " + user_admin);
 			//modelAndView.addObject("user", student);
 			redirectAttributes.addFlashAttribute("user", student);
 			return modelAndView;
@@ -396,6 +453,24 @@ public class UserController {
 		
 		//model.addAttribute("emailDuplicate","registered success");
 		return "redirect:/map";
+		
+		
+	}
+	
+	@RequestMapping(value="/add_covid_success_jsp_form",method=RequestMethod.POST)
+	public String add_covid_success_jsp_form(Model model, @Valid @ModelAttribute("map") CovidMap covidmap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
+		
+		//Date datetime = covidmap.getVisit_date();
+		//logger.info("Check visit date: " + datetime);
+		if(bindingResult.hasErrors()){
+			//return "user_reg";
+			return "add_covid_location";
+		}	
+		
+		covidmapService.registerCovidMap(covidmap);
+
+		//model.addAttribute("emailDuplicate","registered success");
+		return "redirect:/covid_map";
 		
 		
 	}
