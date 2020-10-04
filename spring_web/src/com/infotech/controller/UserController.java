@@ -38,6 +38,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 //import org.springframework.web.bind.annotation.PathVariable;
@@ -59,6 +61,9 @@ import com.infotech.service.UserService;
 import java.sql.Date;
 //import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @Controller
 //can add @ request mapping here so that every url here need to add one more prefix
@@ -255,7 +260,7 @@ public class UserController {
 		HttpSession checkSession = request.getSession(false);
 		String user_mail = (String) checkSession.getAttribute("user_mail");
 		String user_admin = (String) checkSession.getAttribute("user_admin");
-		logger.info("insert map Session admin: " + user_admin);
+		logger.info("insert covid map Session admin: " + user_admin);
 		model.addAttribute("map", new CovidMap());
 		
 		if (user_mail == "" || user_mail == null) {
@@ -266,6 +271,29 @@ public class UserController {
 			
 			if (user_admin.equals("Y")) {
 			return "add_covid_location";
+			}
+			else {
+				return "redirect:/welcome";
+			}
+		}
+		
+	}
+	@RequestMapping(value ="/insert_mass_map" ,method=RequestMethod.GET)
+	public String insert_mass_map( HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		logger.info("insert mass map Session admin: " + user_admin);
+		
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			if (user_admin.equals("Y")) {
+			return "add_mass_location";
 			}
 			else {
 				return "redirect:/welcome";
@@ -456,6 +484,60 @@ public class UserController {
 		
 		
 	}
+	@RequestMapping(value="/test", method=RequestMethod.GET)
+	@ResponseBody
+	public String foo() {
+	    return "Response!";
+	}
+	
+	@RequestMapping(value="/test2", method=RequestMethod.GET)
+	@ResponseBody
+	public String foo2() {
+		final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address=+hong+kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg";
+
+	    RestTemplate restTemplate = new RestTemplate();
+	    String result = restTemplate.getForObject(uri, String.class);
+	    //need to get json
+	    
+	    return result;
+
+	}
+	@RequestMapping(value="/test3", method=RequestMethod.GET)
+	@ResponseBody
+	public String foo3() {
+		final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address=+hong+kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg";
+
+	    RestTemplate restTemplate = new RestTemplate();
+	    String result = restTemplate.getForObject(uri, String.class);
+	    //need to get json
+	    JSONObject json = new JSONObject(result);
+	    
+	    JSONArray JsonArray = json.getJSONArray("results");
+  
+	    JSONObject jsonObject = JsonArray.getJSONObject(0);
+
+	    double lat = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+	    double lng = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+	      
+	    String lats=String.valueOf(lat); 
+	    String lngs=String.valueOf(lng); 
+	    String s = lats.concat(","); 
+	    s = s.concat(lngs);
+	     
+	    return s;
+	    //return result;
+
+	}
+	
+	private static void getTest()
+	{
+	    final String uri = "http://localhost:8080/springweb/test";
+
+	    RestTemplate restTemplate = new RestTemplate();
+	    String result = restTemplate.getForObject(uri, String.class);
+
+	    System.out.println(result);
+	}
 	
 	@RequestMapping(value="/add_covid_success_jsp_form",method=RequestMethod.POST)
 	public String add_covid_success_jsp_form(Model model, @Valid @ModelAttribute("map") CovidMap covidmap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
@@ -474,6 +556,103 @@ public class UserController {
 		
 		
 	}
+	
+	@RequestMapping(value="/add_mass_covid_success_jsp_form",method=RequestMethod.POST)
+	public String add_mass_covid_success_jsp_form(HttpServletRequest request, HttpSession session) {
+		
+		//Date datetime = covidmap.getVisit_date();
+		//logger.info("Check visit date: " + datetime);
+		 String mass_input = request.getParameter("loc_name");
+		 String[] lines = mass_input.split(System.getProperty("line.separator"));
+		 //logger.info("Check mass input: " + lines);
+		 for (int i = 0; i < lines.length; i++) {
+			  //System.out.println(lines[i]);
+			  logger.info("Check mass line: "+i+": " + lines[i]);
+			  
+			  String[] covid_string = lines[i].split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+			  
+			  for (int y = 0; y < covid_string.length; y++) {
+				  
+				  logger.info("Check mass each covid: "+y+": " + covid_string[y]);
+				  //0 district
+				  //1 location name
+				  //2 visit date
+				  //3 case number(s)	  
+				}
+			  String loc_name = covid_string[1];
+			  
+			  String district = covid_string[0];
+			  
+			  String address = covid_string[1]+" "+covid_string[0];
+			  
+			  boolean isFound = loc_name.contains("(non-residential)"); 
+			  
+			  //String visit_date = covid_string[2];
+			  String loc_info = covid_string[3].trim();
+			  final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"+hong+kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg";
+
+			  RestTemplate restTemplate = new RestTemplate();
+			  String result = restTemplate.getForObject(uri, String.class);
+			  //need to get json
+			  JSONObject json = new JSONObject(result);
+			    
+			  JSONArray JsonArray = json.getJSONArray("results");
+			  
+			  String status = json.getString("status");
+			  
+			  logger.info("check status " + status);
+		  
+			  JSONObject jsonObject = JsonArray.getJSONObject(0);
+
+			  float lat = jsonObject.getJSONObject("geometry").getJSONObject("location").getFloat("lat");
+			  float lng = jsonObject.getJSONObject("geometry").getJSONObject("location").getFloat("lng");
+			      
+			  if (status.equals("OK")) {
+			  
+			    CovidMap myObj = new CovidMap();
+			  
+			    loc_name = loc_name.replace('"',' ');
+			    loc_name = loc_name.replaceAll("(non-residential)", " ");
+			    loc_name = loc_name.replace("(", " ");
+			    loc_name = loc_name.replace(")", " ");
+			    logger.info("Check final loc_name: " + loc_name);
+			  
+			    loc_info = loc_info.replace('"',' ');
+			  
+			    myObj.setLoc_name(loc_name);
+			    myObj.setDistrict(district);
+			    myObj.setLoc_info(loc_info);
+			    myObj.setLat(lat);
+			    myObj.setLng(lng);
+                if (isFound) {//non-res
+            	  myObj.setRes(0);
+			    }else {
+				  myObj.setRes(1);
+			    }
+			    covidmapService.registerCovidMap(myObj);
+			  }
+			  else {
+				  logger.info("Check failed loc_name: " + loc_name);
+			  }
+			}
+		
+		//covidmapService.registerCovidMap(covidmap);
+
+		
+		return "redirect:/covid_map";	
+		
+	}
+	
+	/*
+	 $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+loc_new+"+hong+kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg", function(data, status){
+		    
+		 //document.getElementById("show_np").innerHTML = "Current price: "+data.np;//+ ". Checked at "+date+" "+time
+		 document.getElementById("loc_lat").value = data.results[0].geometry.location.lat;
+		 document.getElementById("loc_lng").value = data.results[0].geometry.location.lng;  
+		   
+		  },"json");
+		  */
+	
 	
 	@RequestMapping(value="/user_reg_success_jsp_form",method=RequestMethod.POST)
 	public String user_reg_success_jsp_form(Model model, @Valid @ModelAttribute("user") User user, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {

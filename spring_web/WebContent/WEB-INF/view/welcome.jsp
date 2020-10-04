@@ -73,6 +73,7 @@
 	<h3 align="right"><a href="/spring_web/insert_map">Add Map Location</a></h3>
 	<h3 align="left"><a href="/spring_web/covid_map">Show Covid Map</a></h3>
 	<h3 align="right"><a href="/spring_web/insert_covid_map">Add Covid Map Location</a></h3>
+	<h3 align="right"><a href="/spring_web/insert_mass_map">Add Mass Map Location</a></h3>
 	</div>
 
         

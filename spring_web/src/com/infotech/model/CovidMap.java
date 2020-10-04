@@ -36,10 +36,14 @@ public class CovidMap {
 	//@Min(value = 12)//, message="Age cannot be less than 12")
 	//@Max(value = 120)//,  message="Age cannot be larger than 120")
 	//@NotNull
-	@NotEmpty
 	@Column(name = "loc_info")
 	private String loc_info;
 	
+	@Column(name = "district")
+	private String district;
+	
+	
+
 	@NotNull
 	@Column(name = "lat")
 	private float lat;
@@ -52,17 +56,22 @@ public class CovidMap {
 	@Column(name = "visit_date")
 	private Date visit_date;
 	
-	
+	@Column(name = "residential")
+	private int res;
 	
 
-	public CovidMap(Integer mid, String loc_name, String loc_info, float lat, float lng, Date visit_date) {
+	
+
+	public CovidMap(Integer mid, String loc_name, String district, String loc_info, float lat, float lng, Date visit_date, Integer res) {
 		super();
 		this.mid = mid;
 		this.loc_name = loc_name;
+		this.district = district;
 		this.loc_info = loc_info;
 		this.lat = lat;
 		this.lng = lng;
 		this.visit_date = visit_date;
+		this.res = res;
 	}
 
 	public CovidMap() {
@@ -107,6 +116,19 @@ public class CovidMap {
 	public void setVisit_date(Date visit_date) {
 		this.visit_date = visit_date;
 	}
-	
+	public Integer getRes() {
+		return res;
+	}
+
+	public void setRes(Integer res) {
+		this.res = res;
+	}
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
 
 }
