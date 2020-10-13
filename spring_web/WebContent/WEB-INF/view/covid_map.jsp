@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<h1>My First Google Map</h1>
+<h1>My First Google Map</h1><p id="count"></p>
 
 <div id="googleMap" ></div>
 
@@ -35,15 +35,30 @@ var map = new google.maps.Map(document.getElementById('googleMap'), {
           center: center
         });
 		
+	var count = 0;
     /////for (var i = 0; i < loc.length; i++) {
     	<c:forEach var="map" items="${mapList}">
-        
+    	count += 1;
+    	<c:set var="res" value="${map.res}" scope="request"></c:set>
+    	//<c:set var="res" scope="session" value="1"/>
+    		<c:if test="${res == 1}">
           marker[<c:out value="${map.mid}"/>] = new google.maps.Marker({
           position: {lat:<c:out value="${map.lat}"/>,lng:<c:out value="${map.lng}"/>},//myLatLng[i],
-          //icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
+          icon: 'http://maps.google.com/mapfiles/ms/icons/yellow.png',
           map: map,
           title: "<c:out value="${map.loc_name}"/>"
         });
+          </c:if>
+          
+          <c:if test="${res == 0}">
+          marker[<c:out value="${map.mid}"/>] = new google.maps.Marker({
+          position: {lat:<c:out value="${map.lat}"/>,lng:<c:out value="${map.lng}"/>},//myLatLng[i],
+          //icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png',
+          icon: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+          map: map,
+          title: "<c:out value="${map.loc_name}"/>"
+        });
+          </c:if>
 		
 		
 		
@@ -67,6 +82,7 @@ var map = new google.maps.Map(document.getElementById('googleMap'), {
           return this.infowindow.open(map, this);
         });
         </c:forEach>
+        document.getElementById("count").innerHTML = count;
 		/////}
 		//for (var x = 0; x < marker.length; x++) {
 		//marker[x].addListener('click', function() {

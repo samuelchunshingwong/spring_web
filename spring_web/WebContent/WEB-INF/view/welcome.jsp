@@ -69,6 +69,7 @@
 		
 
 	</table>
+	<a href="https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent/resource/50b8852f-837d-40a0-9b5c-9eed949d2694">Download data from data gov</a>
 	<h3 align="left"><a href="/spring_web/map">Show Map</a></h3>
 	<h3 align="right"><a href="/spring_web/insert_map">Add Map Location</a></h3>
 	<h3 align="left"><a href="/spring_web/covid_map">Show Covid Map</a></h3>

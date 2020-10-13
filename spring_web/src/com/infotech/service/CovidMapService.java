@@ -16,6 +16,7 @@ public interface CovidMapService {
 	
 	public abstract List<CovidMap> getMapList();
 	public abstract boolean registerCovidMap(CovidMap covidmap);
+	public abstract void dropCovidMap();
 	
 }
 	

@@ -29,6 +29,11 @@ public class CovidMapServiceImpl implements CovidMapService {
 			isRegister=true;
 		return isRegister;
 	}
+	public void dropCovidMap() {
+		
+		mapDAO.dropMap();
+		
+	}
 
 	
 	

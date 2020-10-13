@@ -48,6 +48,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 //import com.infotech.model.Student;
 import com.infotech.model.UserCredential;
+import com.google.gson.Gson;
 import com.infotech.dao.MapDAO;
 import com.infotech.model.CovidMap;
 //import com.infotech.model.StudentCredential;
@@ -502,6 +503,18 @@ public class UserController {
 	    return result;
 
 	}
+	
+	@RequestMapping(value="/covidlist", method=RequestMethod.GET)
+	@ResponseBody
+	public String covidlist() {
+		List<CovidMap> mapList = covidmapService.getMapList();
+		String json = new Gson().toJson(mapList);
+	    return json;
+
+	}
+	
+	
+	
 	@RequestMapping(value="/test3", method=RequestMethod.GET)
 	@ResponseBody
 	public String foo3() {
@@ -565,6 +578,8 @@ public class UserController {
 		 String mass_input = request.getParameter("loc_name");
 		 String[] lines = mass_input.split(System.getProperty("line.separator"));
 		 //logger.info("Check mass input: " + lines);
+		 covidmapService.dropCovidMap();
+		 
 		 for (int i = 0; i < lines.length; i++) {
 			  //System.out.println(lines[i]);
 			  logger.info("Check mass line: "+i+": " + lines[i]);
@@ -602,12 +617,14 @@ public class UserController {
 			  
 			  logger.info("check status " + status);
 		  
+			  if (status.equals("OK")) {
+				  
 			  JSONObject jsonObject = JsonArray.getJSONObject(0);
 
 			  float lat = jsonObject.getJSONObject("geometry").getJSONObject("location").getFloat("lat");
 			  float lng = jsonObject.getJSONObject("geometry").getJSONObject("location").getFloat("lng");
 			      
-			  if (status.equals("OK")) {
+			  //try to get chinese 
 			  
 			    CovidMap myObj = new CovidMap();
 			  

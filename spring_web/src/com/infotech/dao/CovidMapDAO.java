@@ -15,6 +15,8 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 @Repository
 public interface CovidMapDAO {
 	public abstract boolean saveMap(CovidMap covidmap);
+	
+	public abstract void dropMap();
 	//public User getUserDetailsByEmailAndPassword(String email,String password);
 	public abstract List<CovidMap> getMapList();
 	//public abstract boolean checkUserByEmail(String email);

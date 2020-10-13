@@ -20,14 +20,14 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+
 @Repository("CovidMapDAO")
 public class CovidMapDAOImpl implements CovidMapDAO{
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	private SessionFactory sessionFactory; 
 	
 private static List<CovidMap> list = null;//in memory database
     
@@ -63,6 +63,31 @@ Logger logger=Logger.getLogger("global");
  			return true;
  		return false;
  	}
+     
+	public void dropMap() {
+		 Session session = sessionFactory.openSession(); 
+    	 //Query query = session.createQuery("delete Product where price > :maxPrice");
+    	 //query.setParameter("maxPrice", new Float(1000f));
+    	 Query query = session.createQuery("delete FROM CovidMap");
+    	  
+    	 int result = query.executeUpdate();
+    	  
+    	 if (result > 0) {
+    		 logger.info("Check drop map: OK");
+    	 }
+    	 session.close();
+         /*
+    	 DetachedCriteria detachedCriteria =  DetachedCriteria.forClass(CovidMap.class);
+    	 
+    	 list = (List<CovidMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+    	 
+    	 logger.info("Check drop map size: " + list.size());
+    	 
+    	 hibernateTemplate.deleteAll(list);
+    	 hibernateTemplate.flush();
+    	 */
+    	 
+     }
 
 	
 }
