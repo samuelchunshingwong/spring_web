@@ -41,7 +41,7 @@
 
         
     <div class="container">
-    <h3 align="left"><a href="/spring_web/search_email">Search Users</a></h3>
+    <h3 align="left"><a href="/spring_web/search_email">Search Users </a></h3>
     <h3 align="left"><a href="/spring_web/listUsers">List Users</a></h3>
 <h3 align="right"><a href="/spring_web/logout">Log Out</a></h3>
 	<h2 align="center">${headerMessage}</h2>
