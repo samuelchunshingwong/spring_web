@@ -19,6 +19,8 @@ public interface CovidMapDAO {
 	public abstract void dropMap();
 	//public User getUserDetailsByEmailAndPassword(String email,String password);
 	public abstract List<CovidMap> getMapList();
+	
+	public abstract List<CovidMap> getMapListByType();
 	//public abstract boolean checkUserByEmail(String email);
 	//public abstract void addUser(User user);
 	//public abstract boolean updateUser(User user);

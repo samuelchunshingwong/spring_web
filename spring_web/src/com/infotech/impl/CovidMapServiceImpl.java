@@ -21,6 +21,10 @@ public class CovidMapServiceImpl implements CovidMapService {
 	public List<CovidMap> getMapList(){
 		return mapDAO.getMapList();
 	}
+	
+	public List<CovidMap> getMapListByType(){
+		return mapDAO.getMapListByType();
+	}
 
 	public boolean registerCovidMap(CovidMap covidmap) {
 		boolean isRegister=false;

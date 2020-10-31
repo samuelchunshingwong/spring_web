@@ -16,6 +16,7 @@ public interface UserService {
 	public abstract boolean registerUser(User user);
 	public abstract boolean updateUser(User user);
 	public abstract boolean validateUserEmail(String email);
+	public abstract List<User> getListByName(String name_input);
 	public abstract List<User> getUserList();
 	public abstract void createUser(User user);
 }

@@ -57,6 +57,30 @@ Logger logger=Logger.getLogger("global");
     	 return list;
  		//return null;
  	}
+     @SuppressWarnings("unchecked")
+	public List<CovidMap> getMapListByType() {
+  		// TODO Auto-generated method stub
+    	 Session session = sessionFactory.openSession(); 
+    	 //Query query = session.createQuery("delete Product where price > :maxPrice");
+    	 //query.setParameter("maxPrice", new Float(1000f));
+    	 Query query = session.createQuery("select res FROM CovidMap where res = 1");
+    	  
+    	 list = (List<CovidMap>) query.list();
+    	  
+    	 
+    	 session.close();
+    	 
+     	 
+     	 
+     	 logger.info("Check map1 size: " + list.size());
+     	 
+     	 //list = (List<GoogleMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+     	 
+     	 //logger.info("Check map0: " + list);
+     	 
+     	 return list;
+  		//return null;
+  	}
      public boolean saveMap(CovidMap googlemap) {
  		int id = (Integer)hibernateTemplate.save(googlemap);
  		if(id>0)

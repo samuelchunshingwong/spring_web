@@ -20,6 +20,9 @@ public class UserServiceImpl implements UserService {
 	public List<User> getUserList(){
 		return userDAO.getUserList();
 	}
+	public List<User> getListByName(String name_input){
+		return userDAO.getListByName(name_input);
+	}
 	public void createUser(User user) {
    	 userDAO.addUser(user);
     }

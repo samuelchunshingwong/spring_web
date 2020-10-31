@@ -1,9 +1,11 @@
 package com.infotech.impl;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Repository;
 
+import com.infotech.model.CovidMap;
 //import com.infotech.model.Student;
 import com.infotech.model.User;
 import com.infotech.dao.UserDAO;
@@ -26,6 +28,11 @@ import org.hibernate.cfg.Configuration;
 public class UserDAOImpl implements UserDAO{
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	Logger logger=Logger.getLogger("global");
 	
 private static List<User> list = null;//in memory database
      static {
@@ -55,7 +62,31 @@ private static List<User> list = null;//in memory database
 			return true;
 		return false;
 	}
-
+    @SuppressWarnings("unchecked")
+	public List<User> getListByName(String name_input) {
+ 		// TODO Auto-generated method stub
+   	 Session session = sessionFactory.openSession(); 
+   	 //Query query = session.createQuery("delete Product where price > :maxPrice");
+   	 //query.setParameter("maxPrice", new Float(1000f));
+   	logger.info("Check name: " + name_input);
+   	 Query query = session.createQuery("FROM User WHERE email like :name_input");
+   	 query.setParameter("name_input", "%"+name_input+"%");
+   	 list = (List<User>) query.list();
+   	  
+   	 
+   	 session.close();
+   	 
+    	 
+    	 
+    	 logger.info("Check name size: " + list.size());
+    	 
+    	 //list = (List<GoogleMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+    	 
+    	 //logger.info("Check map0: " + list);
+    	 
+    	 return list;
+ 		//return null;
+ 	}
 	public boolean updateUser(User user) {
 		
 		//User a = hibernateTemplate.get(User.class, user.getUid());

@@ -41,46 +41,53 @@
 
         
     <div class="container">
-    <h3 align="left"><a href="/spring_web/search_email">Search Users</a></h3>
     <h3 align="left"><a href="/spring_web/listUsers">List Users</a></h3>
 <h3 align="right"><a href="/spring_web/logout">Log Out</a></h3>
-	<h2 align="center">${headerMessage}</h2>
-	<h3 align="center">You have registered with following Info::::</h3>
+	<h3 align="center">Search email result::::</h3>
+	<c:forEach var="searchList" items="${searchList}">
 	<table align="center" border="5px">
 	
 			<tr>
 			<td>User email:</td>
-			<td>${sessionScope.user_mail}</td><!--${user.email}  -->
+			<td>${searchList.email}</td><!--${user.email}  -->
 		</tr>
 	
 		<tr>
 			<td>User name:</td>
-			<td>${sessionScope.user_name}</td><!--${user.username}  -->
+			<td>${searchList.username}</td><!--${user.username}  -->
 		</tr>
 		
 		<tr>
 			<td>User age:</td>
-			<td>${sessionScope.user_age}</td><!--${user.age}  -->
+			<td>${searchList.age}</td><!--${user.age}  -->
 		</tr>
-		<tr>
-			<td>User password:</td>
-			<td>${sessionScope.user_password}</td><!--${user.password}  -->
-		</tr>
+		
 
 		
 
 	</table>
-	<a href="https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent/resource/50b8852f-837d-40a0-9b5c-9eed949d2694">Download data from data gov</a>
-	<h3 align="left"><a href="/spring_web/map">Show Map</a></h3>
-	<h3 align="right"><a href="/spring_web/insert_map">Add Map Location</a></h3>
-	<h3 align="left"><a href="/spring_web/covid_map">Show Covid Map</a></h3>
-	<h3 align="right"><a href="/spring_web/insert_covid_map">Add Covid Map Location</a></h3>
-	<h3 align="right"><a href="/spring_web/insert_mass_map">Add Mass Map Location</a></h3>
+</c:forEach>
 	</div>
+	<!--  
+   <c:forEach var="searchList" items="${searchList}">
+   <div><c:out value="${searchList.username}"/></div>
+   
+   </c:forEach>
+   -->
+    </div>
+        <div style="margin-top:10px" class="form-group">
+                                    <!-- Button -->
 
+                                   
+                                      
+                                      
+                                       
+				                      <a class="btn btn-default" role="button" href="/spring_web">Back</a>
+
+                                   
+                                </div>
         
-        
-        </div></div>
+        </div>
 
 
 </body></html>

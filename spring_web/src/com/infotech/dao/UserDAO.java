@@ -17,8 +17,10 @@ public interface UserDAO {
 	public abstract boolean saveUser(User user);
 	public User getUserDetailsByEmailAndPassword(String email,String password);
 	public abstract List<User> getUserList();
+	public abstract List<User> getListByName(String name_input);
 	public abstract boolean checkUserByEmail(String email);
 	public abstract void addUser(User user);
 	public abstract boolean updateUser(User user);
+	
 }
 

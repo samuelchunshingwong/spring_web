@@ -302,6 +302,30 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping(value ="/search_email" ,method=RequestMethod.GET)
+	public String search_name( HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		logger.info("insert mass map Session admin: " + user_admin);
+		
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			if (user_admin.equals("Y")) {
+			return "search_name";
+			}
+			else {
+				return "redirect:/welcome";
+			}
+		}
+		
+	}
 	/*
 	@RequestMapping(value ="/user_reg" ,method=RequestMethod.GET)
 	public String user_register_page(Model model) {//Model model){
@@ -513,6 +537,15 @@ public class UserController {
 
 	}
 	
+	@RequestMapping(value="/covidlistbytype", method=RequestMethod.GET)
+	@ResponseBody
+	public String covidlistbytype() {
+		List<CovidMap> mapList = covidmapService.getMapListByType();
+		String json = new Gson().toJson(mapList);
+	    return json;
+
+	}
+	
 	
 	
 	@RequestMapping(value="/test3", method=RequestMethod.GET)
@@ -567,6 +600,28 @@ public class UserController {
 		//model.addAttribute("emailDuplicate","registered success");
 		return "redirect:/covid_map";
 		
+		
+	}
+	
+	@RequestMapping(value="/search_email_success_jsp_form",method=RequestMethod.POST)
+	public ModelAndView search_email_success_jsp_form(HttpServletRequest request, HttpSession session) {
+		
+		//Date datetime = covidmap.getVisit_date();
+		//logger.info("Check visit date: " + datetime);
+		 String search_input = request.getParameter("search_name");
+		 //String[] lines = mass_input.split(System.getProperty("line.separator"));
+		 ModelAndView modelAndView = new ModelAndView("search_name_result");
+		 
+		// List<User> userList = userService.getUserList();
+			List<User> searchList = userService.getListByName(search_input);//need name para
+			logger.info("Check search: " + searchList);
+			//logger.info("User List: " + userList);
+			modelAndView.addObject("searchList", searchList);
+			
+			return modelAndView;
+
+		
+		//return "search_name_result";	
 		
 	}
 	
