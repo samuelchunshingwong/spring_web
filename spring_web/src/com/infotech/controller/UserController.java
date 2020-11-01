@@ -308,7 +308,7 @@ public class UserController {
 		HttpSession checkSession = request.getSession(false);
 		String user_mail = (String) checkSession.getAttribute("user_mail");
 		String user_admin = (String) checkSession.getAttribute("user_admin");
-		logger.info("insert mass map Session admin: " + user_admin);
+		//logger.info("insert mass map Session admin: " + user_admin);
 		
 		
 		if (user_mail == "" || user_mail == null) {
@@ -319,6 +319,30 @@ public class UserController {
 			
 			if (user_admin.equals("Y")) {
 			return "search_name";
+			}
+			else {
+				return "redirect:/welcome";
+			}
+		}
+		
+	}
+	
+	@RequestMapping(value ="/search_map" ,method=RequestMethod.GET)
+	public String search_map( HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		//logger.info("insert mass map Session admin: " + user_admin);
+		
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			if (user_admin.equals("Y")) {
+			return "search_map";
 			}
 			else {
 				return "redirect:/welcome";
@@ -615,6 +639,29 @@ public class UserController {
 		// List<User> userList = userService.getUserList();
 			List<User> searchList = userService.getListByName(search_input);//need name para
 			logger.info("Check search: " + searchList);
+			//logger.info("User List: " + userList);
+			modelAndView.addObject("searchList", searchList);
+			
+			return modelAndView;
+
+		
+		//return "search_name_result";	
+		
+	}
+	
+	@RequestMapping(value="/search_map_success_jsp_form",method=RequestMethod.POST)
+	public ModelAndView search_map_success_jsp_form(HttpServletRequest request, HttpSession session) {
+		
+		//Date datetime = covidmap.getVisit_date();
+		//logger.info("Check visit date: " + datetime);
+		 String search_name = request.getParameter("search_name");
+		 
+		 String search_district = request.getParameter("search_district");
+		 //String[] lines = mass_input.split(System.getProperty("line.separator"));
+		 ModelAndView modelAndView = new ModelAndView("search_map_result");
+		 
+			List<CovidMap> searchList = covidmapService.searchMap(search_name, search_district);//need name para
+			logger.info("Check map search: " + searchList);
 			//logger.info("User List: " + userList);
 			modelAndView.addObject("searchList", searchList);
 			

@@ -43,37 +43,31 @@
     <div class="container">
     <h3 align="left"><a href="/spring_web/listUsers">List Users</a></h3>
 <h3 align="right"><a href="/spring_web/logout">Log Out</a></h3>
-	<h3 align="center">Search email result::::</h3>
+	<h3 align="center">Search map result::::</h3>
 	<c:forEach var="searchList" items="${searchList}">
 	<table align="center" border="5px">
 	
 			<tr>
-			<td>User email:</td>
-			<td>${searchList.email}</td><!--${user.email}  -->
+			<td>Location name:</td>
+			<td>${searchList.loc_name}</td><!--${user.email}  -->
 		</tr>
 	
 		<tr>
-			<td>User name:</td>
-			<td>${searchList.username}</td><!--${user.username}  -->
+			<td>District:</td>
+			<td>${searchList.district}</td><!--${user.username}  -->
 		</tr>
 		
 		<tr>
-			<td>User age:</td>
-			<td>${searchList.age}</td><!--${user.age}  -->
+			<td>Residential:</td>
+			<td>${searchList.res}</td><!--${user.age} add if -->
 		</tr>
-		
 
 		
 
 	</table>
 </c:forEach>
 	</div>
-	<!--  
-   <c:forEach var="searchList" items="${searchList}">
-   <div><c:out value="${searchList.username}"/></div>
-   
-   </c:forEach>
-   -->
+	
     </div>
         <div style="margin-top:10px" class="form-group">
                                     <!-- Button -->

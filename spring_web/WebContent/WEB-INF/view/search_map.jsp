@@ -74,12 +74,14 @@ img.bg {
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             
-                        <form action="/spring_web/search_email_success_jsp_form" method="post" >
+                        <form action="/spring_web/search_map_success_jsp_form" method="post" >
                                     
                                      
                             <div style="margin-bottom: 25px" class="input-group">     
                              <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>                                      
-                                    <textarea name="search_name" id="search_name" rows="10" cols="50" type="text" class="form-control" placeholder="Mass Location CSV String"></textarea>
+                                    <textarea name="search_name" id="search_name"  type="text" class="form-control" placeholder="Location name"></textarea>
+                                    
+                                    <textarea name="search_district" id="search_district"  type="text" class="form-control" placeholder="District"></textarea>
                                     </div>
                                     
                      

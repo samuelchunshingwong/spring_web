@@ -114,7 +114,7 @@ Logger logger=Logger.getLogger("global");
      }
 	@SuppressWarnings("unchecked")
 	public List<CovidMap> searchMap(String loc_name, String district){
-		DetachedCriteria detachedCriteria =  DetachedCriteria.forClass(User.class);
+		DetachedCriteria detachedCriteria =  DetachedCriteria.forClass(CovidMap.class);
 		detachedCriteria.add(Restrictions.sqlRestriction(" loc_name LIKE '%"+loc_name+"%' "));
 		detachedCriteria.add(Restrictions.eq("district", district));//DetachedCriteria how to make or instead of and
 		//detachedCriteria.add(Restrictions.eq("password", password));
