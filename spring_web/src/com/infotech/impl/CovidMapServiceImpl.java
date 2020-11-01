@@ -22,6 +22,10 @@ public class CovidMapServiceImpl implements CovidMapService {
 		return mapDAO.getMapList();
 	}
 	
+	public List<CovidMap> searchMap(String loc_name, String district){
+		return mapDAO.searchMap(loc_name, district);
+	}
+	
 	public List<CovidMap> getMapListByType(){
 		return mapDAO.getMapListByType();
 	}

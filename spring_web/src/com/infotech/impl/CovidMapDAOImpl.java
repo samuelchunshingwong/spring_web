@@ -112,6 +112,19 @@ Logger logger=Logger.getLogger("global");
     	 */
     	 
      }
+	@SuppressWarnings("unchecked")
+	public List<CovidMap> searchMap(String loc_name, String district){
+		DetachedCriteria detachedCriteria =  DetachedCriteria.forClass(User.class);
+		detachedCriteria.add(Restrictions.sqlRestriction(" loc_name LIKE '%"+loc_name+"%' "));
+		detachedCriteria.add(Restrictions.eq("district", district));//DetachedCriteria how to make or instead of and
+		//detachedCriteria.add(Restrictions.eq("password", password));
+		List<CovidMap> findByCriteria = (List<CovidMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+		//if(findByCriteria !=null && findByCriteria.size()>0)
+		logger.info("Check serach map size: " + findByCriteria.size());
+		return findByCriteria;
+		//else
+			//return true;
+	}
 
 	
 }
