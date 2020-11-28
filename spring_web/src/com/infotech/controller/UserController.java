@@ -59,6 +59,7 @@ import com.infotech.service.MapService;
 import com.infotech.service.UserService;
 //import com.infotech.service.UserServiceInterface;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 //import java.util.ArrayList;
 import java.util.List;
@@ -672,8 +673,24 @@ public class UserController {
 		
 	}
 	
+
+    
+       public static String deal(String s) {
+        StringBuffer sb = new StringBuffer(s);
+        StringBuffer se = new StringBuffer();    //store final results
+        int l = sb.length();
+        char c;
+        for (int i = 0; i < l; i++) {
+            c = sb.charAt(i);                   //get each char from string
+            if (Character.UnicodeScript.of(c) != Character.UnicodeScript.HAN) {
+                se.append(c);
+            }
+        }
+        return new String(se);
+    }
+	
 	@RequestMapping(value="/add_mass_covid_success_jsp_form",method=RequestMethod.POST)
-	public String add_mass_covid_success_jsp_form(HttpServletRequest request, HttpSession session) {
+	public String add_mass_covid_success_jsp_form(HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
 		
 		//Date datetime = covidmap.getVisit_date();
 		//logger.info("Check visit date: " + datetime);
@@ -696,11 +713,23 @@ public class UserController {
 				  //2 visit date
 				  //3 case number(s)	  
 				}
-			  String loc_name = covid_string[1];
+			  logger.info("check loc_name: " + covid_string[1]);
+			  
+			  //String loc_name = deal(covid_string[1]);
+			  
+			  String str = new String(covid_string[1].getBytes("ISO-8859-1"), "utf-8");
+			  
+			  String loc_name0 = str;
+			  
+			  logger.info("check loc_name normal: " + loc_name0);
+			  
+			  String loc_name = deal(loc_name0);
+			  
+			  logger.info("check loc_name deal: " + loc_name);
 			  
 			  String district = covid_string[0];
 			  
-			  String address = covid_string[1]+" "+covid_string[0];
+			  String address = covid_string[0]+" "+loc_name;
 			  
 			  boolean isFound = loc_name.contains("(non-residential)"); 
 			  
