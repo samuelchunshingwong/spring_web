@@ -82,6 +82,7 @@ Logger logger=Logger.getLogger("global");
   		//return null;
   	}
      public boolean saveMap(CovidMap googlemap) {
+    	 logger.info("Check hibernate insert loc_name: " + googlemap.getLoc_name());
  		int id = (Integer)hibernateTemplate.save(googlemap);
  		if(id>0)
  			return true;

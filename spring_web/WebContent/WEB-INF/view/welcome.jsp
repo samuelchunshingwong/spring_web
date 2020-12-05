@@ -70,7 +70,7 @@
 		
 
 	</table>
-	<a href="https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent">Download data from data gov</a>
+	<a href="https://data.gov.hk/en-data/dataset/hk-dh-chpsebcddr-novel-infectious-agent" target="_blank">Download data from data gov</a>
 	<h3 align="left"><a href="/spring_web/map">Show Map</a></h3>
 	<h3 align="right"><a href="/spring_web/insert_map">Add Map Location</a></h3>
 	<h3 align="left"><a href="/spring_web/covid_map">Show Covid Map</a></h3>

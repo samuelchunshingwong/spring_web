@@ -719,26 +719,40 @@ public class UserController {
 			  
 			  String str = new String(covid_string[1].getBytes("ISO-8859-1"), "utf-8");
 			  
-			  String loc_name0 = str;
+			  String str_dis = new String(covid_string[0].getBytes("ISO-8859-1"), "utf-8");
 			  
-			  logger.info("check loc_name normal: " + loc_name0);
+			  String loc_name = str;
 			  
-			  String loc_name = deal(loc_name0);
+			  String district = str_dis;
 			  
-			  logger.info("check loc_name deal: " + loc_name);
+			  logger.info("check loc_name normal: " + loc_name);
 			  
-			  String district = covid_string[0];
+			  logger.info("check district normal: " + district);
 			  
-			  String address = covid_string[0]+" "+loc_name;
+			  //String loc_name = deal(loc_name0);
 			  
-			  boolean isFound = loc_name.contains("(non-residential)"); 
+			  //logger.info("check loc_name deal: " + loc_name);
+			  
+			  
+			  
+			  //String address = loc_name+" "+district;
+			  boolean isFound = loc_name.contains("(非住宅)"); 
+			  String address = loc_name;
+			  loc_name = loc_name.replace('"',' ');
+			    loc_name = loc_name.replaceAll("(非住宅)", " ");
+			    loc_name = loc_name.replace("(", " ");
+			    loc_name = loc_name.replace(")", " ");
+			    logger.info("Check final loc_name: " + loc_name);
+			    
+			  
 			  
 			  //String visit_date = covid_string[2];
 			  String loc_info = covid_string[3].trim();
-			  final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"+hong+kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg";
-
+			  //final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg&language=en";//zh-CN
+              final String uri = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"+Hong+Kong&key=AIzaSyCXYcuqtMiI25WK3agjWnw5Gd7Gv3hm8eg&language=en";//zh-CN
 			  RestTemplate restTemplate = new RestTemplate();
 			  String result = restTemplate.getForObject(uri, String.class);
+			  
 			  //need to get json
 			  JSONObject json = new JSONObject(result);
 			    
@@ -759,11 +773,7 @@ public class UserController {
 			  
 			    CovidMap myObj = new CovidMap();
 			  
-			    loc_name = loc_name.replace('"',' ');
-			    loc_name = loc_name.replaceAll("(non-residential)", " ");
-			    loc_name = loc_name.replace("(", " ");
-			    loc_name = loc_name.replace(")", " ");
-			    logger.info("Check final loc_name: " + loc_name);
+			    
 			  
 			    loc_info = loc_info.replace('"',' ');
 			  
@@ -772,6 +782,7 @@ public class UserController {
 			    myObj.setLoc_info(loc_info);
 			    myObj.setLat(lat);
 			    myObj.setLng(lng);
+			    
                 if (isFound) {//non-res
             	  myObj.setRes(0);
 			    }else {

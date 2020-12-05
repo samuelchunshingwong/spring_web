@@ -55,13 +55,17 @@
 				<value>com.infotech.model.User</value>
 			</array>
 		</property>
-
+        
 		<property name="hibernateProperties">
 			<props>
+			    <prop key="hibernate.connection.CharSet">utf8mb4</prop>
+                <prop key="hibernate.connection.characterEncoding">utf8</prop>
+                <prop key="hibernate.connection.useUnicode">true</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
+				
 			</props>
 		</property>
 	</bean>
