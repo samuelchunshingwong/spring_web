@@ -116,13 +116,14 @@ public class UserController {
 	@RequestMapping(value ="/covid_map" ,method=RequestMethod.GET)
 	public ModelAndView covid_map(HttpServletRequest request, HttpServletResponse response, HttpSession session){
 		HttpSession checkSession = request.getSession(false);
-		String user_mail = (String) checkSession.getAttribute("user_mail");
-	    
+		//String user_mail = (String) checkSession.getAttribute("user_mail");
+	    /*
 		if (user_mail == "" || user_mail == null) {
 			ModelAndView modelAndView = new ModelAndView("redirect:/");
 			return modelAndView;
 		}
-		else {
+		*/
+		//else {
 		ModelAndView modelAndView = new ModelAndView("covid_map");
 		List<CovidMap> mapList = covidmapService.getMapList();
 		logger.info("Check map: " + mapList);
@@ -130,7 +131,7 @@ public class UserController {
 		modelAndView.addObject("mapList", mapList);
 		
 		return modelAndView;
-		}
+		//}
 	}
 	
 	@RequestMapping(value="/listUsers" ,method=RequestMethod.GET) // can be (value={"/url1","/url2"})
