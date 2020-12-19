@@ -612,7 +612,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/add_covid_success_jsp_form",method=RequestMethod.POST)
-	public String add_covid_success_jsp_form(Model model, @Valid @ModelAttribute("map") CovidMap covidmap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
+	public String add_covid_success_jsp_form(Model model, @Valid @ModelAttribute("map") CovidMap covidmap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
 		
 		//Date datetime = covidmap.getVisit_date();
 		//logger.info("Check visit date: " + datetime);
@@ -621,8 +621,19 @@ public class UserController {
 			return "add_covid_location";
 		}	
 		
+		String loc_name = covidmap.getLoc_name();
+		
+		String district = covidmap.getDistrict();
+		
+		String str = new String(loc_name.getBytes("ISO-8859-1"), "utf-8");
+		  
+		String str_dis = new String(district.getBytes("ISO-8859-1"), "utf-8");
+		
+		covidmap.setLoc_name(str);
+		covidmap.setDistrict(str_dis);
+		
 		covidmapService.registerCovidMap(covidmap);
-
+ 
 		//model.addAttribute("emailDuplicate","registered success");
 		return "redirect:/covid_map";
 		
