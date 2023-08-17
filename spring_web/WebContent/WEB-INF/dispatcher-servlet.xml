@@ -74,7 +74,7 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<array>
-				<value>/WEB-INF/database.properties</value>
+				<value>/WEB-INF/database-prod.properties</value>
 			</array>
 		</property>
 	</bean>
