@@ -14,6 +14,9 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.infotech.validator.IsValidPassword;
+import com.infotech.validator.NoDuplicateEmail;
+
 
 @Entity
 @Table(name = "user_table")
@@ -43,6 +46,7 @@ public class User {
 	@NotEmpty
 	@Size(min=6,max=20)//{2} means min //base on alphabetical order, max mean {1}
 	@Column(name = "password")
+	@IsValidPassword
 	private String password;
 	
 	@Column(name = "admin")

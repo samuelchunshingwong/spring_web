@@ -52,6 +52,7 @@
 			<array>
 			    <value>com.infotech.model.CovidMap</value>
 				<value>com.infotech.model.GoogleMap</value>
+				<value>com.infotech.model.MapName</value>
 				<value>com.infotech.model.User</value>
 			</array>
 		</property>

@@ -57,6 +57,23 @@ Logger logger=Logger.getLogger("global");
     	 return list;
  		//return null;
  	}
+     @SuppressWarnings("unchecked")
+  	public List<GoogleMap> getMapListById(Integer map_id) {
+  		// TODO Auto-generated method stub
+     	 DetachedCriteria detachedCriteria =  DetachedCriteria.forClass(GoogleMap.class);
+     	 detachedCriteria.add(Restrictions.eq("map_id", map_id));
+     	 
+     	 list = (List<GoogleMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+     	 
+     	 logger.info("Check map0 size: " + list.size());
+     	 
+     	 //list = (List<GoogleMap>) hibernateTemplate.findByCriteria(detachedCriteria);
+     	 
+     	 //logger.info("Check map0: " + list);
+     	 
+     	 return list;
+  		//return null;
+  	}
      public boolean saveMap(GoogleMap googlemap) {
  		int id = (Integer)hibernateTemplate.save(googlemap);
  		if(id>0)

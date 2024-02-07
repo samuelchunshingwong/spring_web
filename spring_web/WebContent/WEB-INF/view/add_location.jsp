@@ -101,7 +101,19 @@ img.bg {
                                     <form:input path="lng" id="loc_lng" type="text" class="form-control" placeholder="Lng"/>
 				                    
                                     </div>
-                                   
+                                    
+                            <div style="margin-bottom: 25px" class="input-group">
+                                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                                    <form:select path="map_id" id="map_id" class="form-control">
+                                    <c:forEach var="mapName" items="${mapNameList}">
+                                    <form:option value="${mapName.map_id}"> ${mapName.name}</form:option>
+                                    </c:forEach>
+                                    </form:select>
+                                    </div>
+                                    
+                                   <div>Full address:
+                                   <span id="full_address"></span>
+                                   </div>
 
                                 
                             
@@ -144,7 +156,8 @@ $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+loc_new+"+hon
 	 //document.getElementById("show_np").innerHTML = "Current price: "+data.np;//+ ". Checked at "+date+" "+time
 	 document.getElementById("loc_lat").value = data.results[0].geometry.location.lat;
 	 document.getElementById("loc_lng").value = data.results[0].geometry.location.lng;  
-	   
+	 document.getElementById("full_address").innerHTML = data.results[0].formatted_address;
+	 document.getElementById("loc_info").value = data.results[0].formatted_address;
 	  },"json");
 };
 </script>

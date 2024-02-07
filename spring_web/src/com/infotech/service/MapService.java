@@ -15,6 +15,7 @@ import com.infotech.model.User;
 public interface MapService {
 	
 	public abstract List<GoogleMap> getMapList();
+	public abstract List<GoogleMap> getMapListById(Integer map_id);
 	public abstract boolean registerMap(GoogleMap googlemap);
 	
 }

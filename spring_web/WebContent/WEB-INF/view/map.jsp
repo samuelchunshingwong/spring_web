@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<h1>My First Google Map</h1>
+<h1>${mapName}</h1>
 
 <div id="googleMap" ></div>
 

@@ -45,8 +45,11 @@ public class GoogleMap {
 	@Column(name = "wiki_link")
 	private String wiki_link;
 	
+	@Column(name = "map_id")
+	private Integer map_id;
 	
-	public GoogleMap(Integer mid, String loc_name, String loc_info, float lat, float lng, String wiki_link) {
+	
+	public GoogleMap(Integer mid, String loc_name, String loc_info, float lat, float lng, String wiki_link, Integer map_id) {
 		super();
 		this.mid = mid;
 		this.loc_name = loc_name;
@@ -54,6 +57,7 @@ public class GoogleMap {
 		this.lat = lat;
 		this.lng = lng;
 		this.wiki_link = wiki_link;
+		this.map_id = map_id;
 	}
 
 	public GoogleMap() {
@@ -95,6 +99,14 @@ public class GoogleMap {
 	}
 	public void setWiki_link(String wiki_link) {
 		this.wiki_link = wiki_link;
+	}
+
+	public Integer getMap_id() {
+		return map_id;
+	}
+
+	public void setMap_id(Integer map_id) {
+		this.map_id = map_id;
 	}
 	
 	

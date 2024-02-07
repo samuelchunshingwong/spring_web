@@ -21,6 +21,10 @@ public class MapServiceImpl implements MapService {
 	public List<GoogleMap> getMapList(){
 		return mapDAO.getMapList();
 	}
+	
+	public List<GoogleMap> getMapListById(Integer map_id){
+		return mapDAO.getMapListById(map_id);
+	}
 
 	public boolean registerMap(GoogleMap googlemap) {
 		boolean isRegister=false;

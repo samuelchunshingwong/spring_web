@@ -38,6 +38,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 //import org.springframework.web.bind.annotation.RequestParam;
@@ -53,8 +54,10 @@ import com.infotech.dao.MapDAO;
 import com.infotech.model.CovidMap;
 //import com.infotech.model.StudentCredential;
 import com.infotech.model.GoogleMap;
+import com.infotech.model.MapName;
 import com.infotech.model.User;
 import com.infotech.service.CovidMapService;
+import com.infotech.service.MapNameService;
 import com.infotech.service.MapService;
 import com.infotech.service.UserService;
 //import com.infotech.service.UserServiceInterface;
@@ -78,6 +81,9 @@ public class UserController {
 	private MapService mapService;
 	
 	@Autowired
+	private MapNameService mapnameService;
+	
+	@Autowired
 	private CovidMapService covidmapService;
 	
 	Logger logger=Logger.getLogger("global");
@@ -94,7 +100,7 @@ public class UserController {
 	}
 	*/
 	@RequestMapping(value ="/map" ,method=RequestMethod.GET)
-	public ModelAndView map(HttpServletRequest request, HttpServletResponse response, HttpSession session){
+	public ModelAndView map(HttpServletRequest request, @RequestParam(required = true, value = "map_id") Integer map_id, HttpServletResponse response, HttpSession session){
 		HttpSession checkSession = request.getSession(false);
 		String user_mail = (String) checkSession.getAttribute("user_mail");
 	    
@@ -104,10 +110,12 @@ public class UserController {
 		}
 		else {
 		ModelAndView modelAndView = new ModelAndView("map");
-		List<GoogleMap> mapList = mapService.getMapList();
+		List<GoogleMap> mapList = mapService.getMapListById(map_id);
+		MapName mapName = mapnameService.getMapNameById(map_id);
 		logger.info("Check map: " + mapList);
 		//logger.info("User List: " + userList);
 		modelAndView.addObject("mapList", mapList);
+		modelAndView.addObject("mapName", mapName.getName());
 		
 		return modelAndView;
 		}
@@ -155,7 +163,24 @@ public class UserController {
 		//return new ModelAndView("view name", "model name","model object");
 		
 	}
-	
+	@RequestMapping(value="/listMaps" ,method=RequestMethod.GET) // can be (value={"/url1","/url2"})
+	public ModelAndView listMaps(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+	    
+		if (user_mail == "" || user_mail == null) {
+			ModelAndView modelAndView = new ModelAndView("redirect:/");
+			return modelAndView;
+		}
+		else {
+		ModelAndView modelAndView = new ModelAndView("mapList");
+		List<MapName> mapList = mapnameService.getMapNameList();
+		logger.info("Map List: " + mapList);
+		modelAndView.addObject("mapList", mapList);
+		
+		return modelAndView;
+		}
+	}
 	
 	@RequestMapping(value="/test_msg" ,method=RequestMethod.GET) // can be (value={"/url1","/url2"})
 	public String test_msg(Model model) {
@@ -235,6 +260,29 @@ public class UserController {
 		}
 		
 	}
+	@RequestMapping(value ="/add_map" ,method=RequestMethod.GET)
+	public String add_map(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session){
+		HttpSession checkSession = request.getSession(false);
+		String user_mail = (String) checkSession.getAttribute("user_mail");
+		String user_admin = (String) checkSession.getAttribute("user_admin");
+		logger.info("insert map Session admin: " + user_admin);
+		model.addAttribute("map", new MapName());
+		
+		if (user_mail == "" || user_mail == null) {
+		  // do something without creating session object.
+			return "redirect:/";
+		}
+		else {
+			
+			if (user_admin.equals("Y")) {
+			return "add_map";
+			}
+			else {
+				return "redirect:/welcome";
+			}
+		}
+		
+	}
 	@RequestMapping(value ="/insert_map" ,method=RequestMethod.GET)
 	public String insert_map(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session){
 		HttpSession checkSession = request.getSession(false);
@@ -242,6 +290,8 @@ public class UserController {
 		String user_admin = (String) checkSession.getAttribute("user_admin");
 		logger.info("insert map Session admin: " + user_admin);
 		model.addAttribute("map", new GoogleMap());
+		List<MapName> mapList = mapnameService.getMapNameList();
+		model.addAttribute("mapNameList", mapList);
 		
 		if (user_mail == "" || user_mail == null) {
 		  // do something without creating session object.
@@ -384,6 +434,12 @@ public class UserController {
 		model.addAttribute("user", new User());//"user" should match with form modelAttribute
 		return "user_reg";
 	}
+	@RequestMapping(value ="/upload_file" ,method=RequestMethod.GET)
+	public String upload_file_page(Model model) {//Model model){
+		
+		//model.addAttribute("user", new User());//"user" should match with form modelAttribute
+		return "upload_file";
+	}
 	@RequestMapping(value ="/login" ,method=RequestMethod.GET)
 	public String loginPage(Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session){
 		model.addAttribute("userCredential", new UserCredential());
@@ -518,20 +574,39 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/add_loc_success_jsp_form",method=RequestMethod.POST)
-	public String add_loc_success_jsp_form(Model model, @Valid @ModelAttribute("map") GoogleMap googlemap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) {
+	public String add_loc_success_jsp_form(Model model, @Valid @ModelAttribute("map") GoogleMap googlemap, BindingResult bindingResult,HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
 		//User user = new User(username,age,email);
 		if(bindingResult.hasErrors()){
 			//return "user_reg";
 			return "add_location";
 		}
-		
+		String loc_info = googlemap.getLoc_info();
+		String new_loc_info = new String(loc_info.getBytes("ISO-8859-1"), "utf-8");
+		googlemap.setLoc_info(new_loc_info);
 		
 		mapService.registerMap(googlemap);
 		
 		
 		
 		//model.addAttribute("emailDuplicate","registered success");
-		return "redirect:/map";
+		return "redirect:/insert_map";
+		
+		
+	}
+	@RequestMapping(value="/add_map_success_jsp_form",method=RequestMethod.POST)
+	public String add_map_success_jsp_form(Model model, @Valid @ModelAttribute("map") MapName map, BindingResult bindingResult,HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException {
+		//User user = new User(username,age,email);
+		if(bindingResult.hasErrors()){
+			//return "user_reg";
+			return "add_map";
+		}
+		
+		mapnameService.registerMapName(map);
+		
+		
+		
+		//model.addAttribute("emailDuplicate","registered success");
+		return "redirect:/add_map";
 		
 		
 	}
@@ -748,10 +823,10 @@ public class UserController {
 			  
 			  
 			  //String address = loc_name+" "+district;
-			  boolean isFound = loc_name.contains("(非住宅)"); 
+			  boolean isFound = loc_name.contains("(�����)"); 
 			  String address = loc_name;
 			  loc_name = loc_name.replace('"',' ');
-			    loc_name = loc_name.replaceAll("(非住宅)", " ");
+			    loc_name = loc_name.replaceAll("(�����)", " ");
 			    loc_name = loc_name.replace("(", " ");
 			    loc_name = loc_name.replace(")", " ");
 			    logger.info("Check final loc_name: " + loc_name);
@@ -842,13 +917,15 @@ public class UserController {
 		
 		
 		
-		//model.addAttribute("emailDuplicate","registered success");
+		model.addAttribute("emailDuplicate","registered success");
 		return "redirect:/register_success";
+		
 		}
 		else {
 			model.addAttribute("emailDuplicate","Email has been used already");
 			return "user_reg";
 		}
+		
 		//getUserServiceInterface().registerUser(user);
 
 		//return "redirect:/listUsers";
@@ -872,6 +949,15 @@ public class UserController {
 
 		//return "redirect:/listUsers";
 		//return new ModelAndView("view name", "model name","model object");
+	}
+	
+	@RequestMapping(value="/maplist", method=RequestMethod.GET)
+	@ResponseBody
+	public String maplist() {
+		List<MapName> mapList = mapnameService.getMapNameList();
+		String json = new Gson().toJson(mapList);
+	    return json;
+
 	}
 
 
